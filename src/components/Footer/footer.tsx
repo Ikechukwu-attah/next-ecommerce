@@ -27,18 +27,16 @@ const Footer = () => {
 
         {/* Center */}
         <div className="hidden lg:flex justify-between w-1/2">
-          <div className=" flex flex-col justify-between">
-            {footerData.map((items) => (
-              <>
-                <h1>{items.title.toUpperCase()}</h1>
-                {items.data.map((item) => (
-                  <div key={item.id} className="flex flex-col gap-6">
-                    <Link href={item.url}>{item.link}</Link>
-                  </div>
-                ))}
-              </>
-            ))}
-          </div>
+          {footerData.map((items) => (
+            <div className=" flex flex-col justify-between" key={items.id}>
+              <h1>{items.title.toUpperCase()}</h1>
+              {items.data.map((item) => (
+                <div key={item.id} className="flex flex-col gap-6">
+                  <Link href={item.url}>{item.link}</Link>
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
 
         {/* right */}
@@ -71,7 +69,20 @@ const Footer = () => {
 
       {/*Bootom   */}
 
-      <div></div>
+      <div className="flex flex-col md:flex-row items-center justify-between gap-8 mt-16">
+        <div> 2024 Tony Shop</div>
+        <div className="flex flex-col gap-8 md:flex-row">
+          <div className="">
+            <span className="text-gray-500 mr-4">Language</span>
+            <span className="font-medium">United States | English</span>
+          </div>
+
+          <div className="">
+            <span className="text-gray-500 mr-4">Currency</span>
+            <span className="font-medium">$ USD</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

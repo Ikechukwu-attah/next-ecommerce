@@ -145,21 +145,93 @@ export const footerData: FooterI[] = [
       },
 
       {
-        id: 2,
+        id: 3,
         url: "/",
         link: "Affiliates",
       },
 
       {
-        id: 2,
+        id: 4,
         url: "/",
         link: "Blogs",
       },
 
       {
-        id: 2,
+        id: 5,
         url: "/",
         link: "Contact Us",
+      },
+    ],
+  },
+
+  {
+    id: 2,
+    title: "Shop",
+    data: [
+      {
+        id: 1,
+        url: "/",
+        link: "New Arrival",
+      },
+
+      {
+        id: 2,
+        url: "/",
+        link: "Accessories",
+      },
+
+      {
+        id: 3,
+        url: "/",
+        link: "Men",
+      },
+
+      {
+        id: 4,
+        url: "/",
+        link: "Women",
+      },
+
+      {
+        id: 5,
+        url: "/",
+        link: "All Products",
+      },
+    ],
+  },
+
+  {
+    id: 1,
+    title: "Help",
+    data: [
+      {
+        id: 1,
+        url: "/",
+        link: "Customer Service",
+      },
+
+      {
+        id: 2,
+        url: "/",
+        link: "My Account",
+      },
+
+      {
+        id: 3,
+        url: "/",
+        link: "Find a Store",
+      },
+
+      {
+        id: 4,
+        url: "/",
+        link: "Legal & Privacy",
+      },
+
+      {
+        id: 5,
+        url: "/",
+        link: "Gift Card",
       },
     ],
   },
