@@ -37,11 +37,11 @@ const ProductImages = () => {
           className="object-cover rounded-md"
         />
       </div>
-      <div className="flex gap-8 justify-between mt-10 ">
+      <div className="flex gap-4 justify-between mt-10 ">
         {images.map((image, index) => (
           <div
             key={image.id}
-            className={`relative w-1/4 h-32 gap-4 mt-8 cursor-pointer ${
+            className={`relative w-1/4 h-32  mt-8 cursor-pointer ${
               imageList === index ? "border-2 border-yellow-600 rounded-md" : ""
             }`}
             onClick={() => setImageList(index)}

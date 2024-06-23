@@ -4,7 +4,7 @@ import ProductImages from "@/components/ProductImages/productImages";
 
 const SinglePage = () => {
   return (
-    <div className="px-4 md:px-8 lg:px-16 xl:32 2xl:px-64 relative flex  flex-col lg:flex-row gap-16">
+    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative flex  flex-col lg:flex-row gap-16">
       <div className="w-full lg:w-1/2 lg:sticky top-20 h-max ">
         {/* Image */}
 
@@ -29,6 +29,26 @@ const SinglePage = () => {
         <CustomizeProducts />
         <Add />
         <div className="h-[2px] bg-gray-100"></div>
+        <div className="text-sm">
+          <h4 className="font-medium mb-4">Title</h4>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et nisi qui
+            labore cum nostrum provident sequi autem tempore dolorum ipsa
+            aspernatur ullam, omnis expedita sapiente incidunt, nobis delectus
+            pariatur ea?
+          </p>
+        </div>
+
+        <div className="text-sm">
+          <h4 className="font-medium mb-4">Title</h4>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et nisi qui
+            labore cum nostrum provident sequi autem tempore dolorum ipsa
+            aspernatur ullam, omnis expedita sapiente incidunt, nobis delectus
+            pariatur ea?
+          </p>
+        </div>
+
         <div className="text-sm">
           <h4 className="font-medium mb-4">Title</h4>
           <p>

@@ -13,32 +13,34 @@ const CartModel = () => {
         <>
           <h2 className="pb-4">Shopping Cart</h2>
           <div className="flex flex-col gap-8">
-            <div className="flex gap-4">
-              <Image
-                src={
-                  "https://images.pexels.com/photos/6178715/pexels-photo-6178715.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
-                }
-                alt=""
-                width={76}
-                height={96}
-                className="object-cover rounded-md"
-              />
-              <div className="flex flex-col justify-between w-full">
-                {/* Top */}
-                {/* Title */}
-                <div className="flex justify-between items-center gap-8">
-                  <h3 className="font-semibold">Product Name</h3>
-                  <div className="p-1 bg-gray-50 rounded-sm">$78</div>
-                </div>
-                {/* Description */}
-                <div className="text-sm text-gray-500">Available </div>
-                {/* Bottom */}
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Quantity 2</span>
-                  <span className="text-blue-500">Remove</span>
+            {Array.from({ length: 3 }, (_, index) => (
+              <div className="flex gap-4" key={index}>
+                <Image
+                  src={
+                    "https://images.pexels.com/photos/6178715/pexels-photo-6178715.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+                  }
+                  alt=""
+                  width={76}
+                  height={96}
+                  className="object-cover rounded-md"
+                />
+                <div className="flex flex-col justify-between w-full">
+                  {/* Top */}
+                  {/* Title */}
+                  <div className="flex justify-between items-center gap-8">
+                    <h3 className="font-semibold">Product Name</h3>
+                    <div className="p-1 bg-gray-50 rounded-sm">$78</div>
+                  </div>
+                  {/* Description */}
+                  <div className="text-sm text-gray-500">Available </div>
+                  {/* Bottom */}
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-500">Quantity 2</span>
+                    <span className="text-blue-500">Remove</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
 
           {/* Bottom */}
