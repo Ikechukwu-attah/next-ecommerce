@@ -24,13 +24,14 @@ const images = [
   },
 ];
 
-const ProductImages = () => {
+const ProductImages = ({ items }: { items: any }) => {
   const [imageList, setImageList] = useState(0);
+
   return (
     <div className="">
       <div className="h-[500px] relative">
         <Image
-          src={images[imageList].url}
+          src={items[imageList].image?.url || "/cat.png"}
           alt=""
           fill
           sizes="50vw"
@@ -38,20 +39,20 @@ const ProductImages = () => {
         />
       </div>
       <div className="flex gap-4 justify-between mt-10 ">
-        {images.map((image, index) => (
+        {items.map((item: any, index: number) => (
           <div
-            key={image.id}
-            className={`relative w-1/4 h-32  mt-8 cursor-pointer ${
+            key={item._id}
+            className={`relative w-1/4 h-32 mt-8 cursor-pointer ${
               imageList === index ? "border-2 border-yellow-600 rounded-md" : ""
             }`}
             onClick={() => setImageList(index)}
           >
             <Image
-              src={image.url}
-              alt=""
+              src={item.image?.url}
+              alt={item.title}
               fill
               sizes="30vw"
-              className="rounded-md"
+              className="rounded-md object-cover"
             />
           </div>
         ))}
