@@ -23,6 +23,7 @@ const CustomizeProducts = ({
     setSelectedOption((prev) => ({ ...prev, [optionType]: choice }));
   };
 
+  console.log(selectedOption);
   const isVariantInStock = (choices: { [key: string]: string }) => {
     return variants.some((variant) => {
       const variantChoices = variant.choices;
@@ -32,7 +33,10 @@ const CustomizeProducts = ({
       return (
         Object.entries(choices).every(
           ([key, value]) => variantChoices[key] === value
-        ) && variant.stock?.inStock
+        ) &&
+        variant.stock?.inStock &&
+        variant.stock?.quantity &&
+        variant.stock.quantity > 0
       );
     });
   };
@@ -42,13 +46,56 @@ const CustomizeProducts = ({
       {productOptions.map((option) => (
         <div className="flex flex-col gap4" key={option.name}>
           <h4 className="font-medium">Choose a {option.name}</h4>
-          {option.choices?.map((choice) => (
-            <div className="" key={choice.value}>
-              {choice.description}
-            </div>
-          ))}
+          <ul className="flex items-center gap-3" key={option.name}>
+            {option.choices?.map((choice) => {
+              const disabled = !isVariantInStock({
+                ...selectedOption,
+                [option.name!]: choice.description!,
+              });
+              const selected =
+                selectedOption[option.name!] === choice.description;
+              const clickHandler = disabled
+                ? undefined
+                : () => handleSelectedOption(option.name!, choice.description!);
 
-          {/* <ul className="flex items-center gap-3">
+              return option.name === "Color" ? (
+                <li
+                  className="w-8 h-8 rounded-full ring-1 ring-gray-300  relative "
+                  style={{
+                    backgroundColor: choice.description,
+                    cursor: disabled ? "not-allowed" : "pointer",
+                  }}
+                  onClick={clickHandler}
+                >
+                  {selected && (
+                    <div className="absolute w-10 h-10 rounded-full ring-2 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 " />
+                  )}
+
+                  {disabled && (
+                    <div className="absolute w-10 h-[2px] rotate-45 bg-red-400 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 " />
+                  )}
+                </li>
+              ) : (
+                <li
+                  className="ring-1 ring-primary text-primary rounded-md py-1 px-4 text-sm cursor-pointer"
+                  style={{
+                    cursor: disabled ? "not-allowed" : "pointer",
+                    backgroundColor: selected
+                      ? "#f35c7a"
+                      : disabled
+                      ? "#FBCFE8"
+                      : "white",
+                    color: selected || disabled ? "white" : "#f35c7a",
+                    boxShadow: disabled ? "none" : "",
+                  }}
+                  onClick={clickHandler}
+                >
+                  {choice.description}
+                </li>
+              );
+            })}
+
+            {/* <ul className="flex items-center gap-3">
             <li className="w-8 h-8 rounded-full ring-1 ring-gray-300 cursor-pointer relative bg-red-500">
               <div className="absolute w-10 h-10 rounded-full ring-2 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 " />
             </li>
@@ -58,6 +105,7 @@ const CustomizeProducts = ({
               <div className="absolute w-10 h-[2px] rotate-45 bg-red-400 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 " />
             </li>
           </ul> */}
+          </ul>
         </div>
       ))}
 
