@@ -3,22 +3,54 @@ import { products } from "@wix/stores";
 import Image from "next/image";
 import Link from "next/link";
 import DOMPurify from "isomorphic-dompurify";
+import Pagination from "../Pagination/pagination";
 
 const ProductList = async ({
   categoryId,
   limit,
+  searchParams,
 }: {
   categoryId: string;
   limit?: number;
+  searchParams?: any;
 }) => {
+  const product_per_page = 8;
   const wixClient = await wixClientServer();
-  const res = await wixClient.products
+  const productQuery = wixClient.products
     .queryProducts()
+    .startsWith("name", searchParams?.name || "")
     .eq("collectionIds", categoryId)
-    .limit(limit || 20)
-    .find();
+    .hasSome(
+      "productType",
+      searchParams?.type ? [searchParams.type] : ["physical", "digital"]
+    )
+    .gt("priceData.price", searchParams?.min || 0)
+    .lt("priceData.price", searchParams?.max || 999999)
+    .limit(limit || product_per_page)
+    .skip(
+      searchParams?.page
+        ? parseInt(searchParams.page) * (limit || product_per_page)
+        : 0
+    );
 
-  console.log(res.items);
+  console.log("searchParams", searchParams);
+
+  if (searchParams?.sort) {
+    const [sortType, sortBy] = searchParams.sort.split(" ");
+    console.log("sortType", sortType);
+
+    if (sortType === "asc") {
+      console.log("Applying ascending sort on:", sortBy);
+      productQuery.ascending(sortBy);
+    }
+    if (sortType === "desc") {
+      productQuery.descending(sortBy);
+    }
+  }
+
+  console.log("kudos");
+  const res = await productQuery.find();
+  console.log("res", res);
   return (
     <div className="mt-12 flex gap-x-8 gap-y-16 justify-between flex-wrap">
       {res.items.map((product: products.Product) => (
@@ -68,6 +100,12 @@ const ProductList = async ({
           </button>
         </Link>
       ))}
+
+      <Pagination
+        currentPage={res.currentPage || 0}
+        hasPrev={res.hasPrev()}
+        hasNext={res.hasNext()}
+      />
     </div>
   );
 };

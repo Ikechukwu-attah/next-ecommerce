@@ -1,4 +1,21 @@
+"use client";
+
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import React from "react";
+
 function Filter() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
+
+  const handleFilterChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    const params = new URLSearchParams(searchParams);
+    params.set(name, value);
+    replace(`${pathname}?${params.toString()}`);
+  };
   return (
     <div className="mt-12 flex justify-between gap-3">
       <div className="flex gap-6 flex-wrap">
@@ -6,6 +23,7 @@ function Filter() {
           name="type"
           id=""
           className="py-2 px-4 rounded-2xl font-medium bg-[#EBEDED]"
+          onChange={handleFilterChange}
         >
           <option>Type</option>
           <option value={"physical"}>Physical</option>
@@ -16,6 +34,7 @@ function Filter() {
           name="min"
           placeholder="min price"
           className="text-xs rounded-2xl pl-2 w-24 ring-1 ring-gray-400"
+          onChange={handleFilterChange}
         />
 
         <input
@@ -23,30 +42,14 @@ function Filter() {
           name="max"
           placeholder="max price"
           className="text-xs rounded-2xl pl-2 w-24 ring-1 ring-gray-400"
+          onChange={handleFilterChange}
         />
-        <select
-          name="type"
-          id=""
-          className="py-2 px-4 rounded-2xl font-medium bg-[#EBEDED]"
-        >
-          <option>Size</option>
-          <option value={""}>Size</option>
-        </select>
-
-        <select
-          name="type"
-          id=""
-          className="py-2 px-4 rounded-2xl font-medium bg-[#EBEDED]"
-        >
-          <option>Type</option>
-          <option value={"physical"}>Physical</option>
-          <option value={"digital"}>Digital</option>
-        </select>
 
         <select
           name="category"
           id=""
           className="py-2 px-4 rounded-2xl font-medium bg-[#EBEDED]"
+          onChange={handleFilterChange}
         >
           <option>Category</option>
           <option value={"category"}>Category</option>
@@ -57,6 +60,7 @@ function Filter() {
           name="allFilter"
           id=""
           className="py-2 px-4 rounded-2xl font-medium bg-[#EBEDED]"
+          onChange={handleFilterChange}
         >
           <option>All Filters</option>
           <option value={"physical"}>Physical</option>
@@ -66,15 +70,16 @@ function Filter() {
 
       <div className="">
         <select
-          name=""
+          name="sort"
           id=""
           className="py-2 px-4 rounded-2xl font-medium bg-[#EBEDED]"
+          onChange={handleFilterChange}
         >
-          <option value={""}>Sort By</option>
-          <option value={"physical"}>Price (low to high)</option>
-          <option value={"digital"}>Price (high to low)</option>
-          <option value={"digital"}>Newest </option>
-          <option value={"digital"}>Oldest</option>
+          <option>Sort By</option>
+          <option value="asc price">Price (low to high)</option>
+          <option value="desc price">Price (high to low)</option>
+          <option value="asc lastUpdated">Newest</option>
+          <option value="desc lastUpdated">Oldest</option>
         </select>
       </div>
     </div>
