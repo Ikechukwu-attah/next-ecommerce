@@ -3,8 +3,13 @@ import React from "react";
 import Menu from "../Menu/menu";
 import Image from "next/image";
 import SearchBar from "../SearchBar/searchBar";
-import NavbarIcons from "./navbarIcons";
+// import NavbarIcons from "./navbarIcons";
 import { bigScreenSidNavbar, leftSidNavbar } from "@/dummyData/data";
+import dynamic from "next/dynamic";
+
+const NavbarIcons = dynamic(() => import("./navbarIcons"), {
+  ssr: false,
+});
 
 const Navbar = () => {
   return (

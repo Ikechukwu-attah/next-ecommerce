@@ -1,9 +1,21 @@
 "use client";
 
+import { useCartStore } from "@/hooks/useCartStore";
+import { useWixClient } from "@/hooks/useWixClient";
+import { get } from "http";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 
 const CartModel = () => {
+  const wixClient = useWixClient();
+
+  const { cart, getCart } = useCartStore();
+  useEffect(() => {
+    getCart(wixClient);
+  }, [wixClient, getCart]);
+
+  console.log({ cart });
+
   const cartItems = true;
   return (
     <div className=" w-max absolute p-4 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] z-20 bg-white top-12 right-0 flex flex-col">

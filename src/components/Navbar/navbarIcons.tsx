@@ -23,7 +23,7 @@ const NavbarIcons: React.FC = () => {
   const handleLogout = async () => {
     setIsLoading(true);
     Cookies.remove("refreshToken");
-    const { logoutUrl } = await wixClient.auth.logout(pathname);
+    const { logoutUrl } = await wixClient.auth.logout(window.location.href);
 
     setIsLoading(false);
     setIsProfileOpen(false);

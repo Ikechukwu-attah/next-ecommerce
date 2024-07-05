@@ -3,9 +3,10 @@
 import { useWixClient } from "@/hooks/useWixClient";
 import { LoginState } from "@wix/sdk";
 import Cookies from "js-cookie";
+
 import { usePathname, useRouter } from "next/navigation";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 enum Mode {
   LOGIN = "LOGIN",
@@ -48,59 +49,111 @@ const LoginPage = () => {
 
   const isLoggedIn = wixClient.auth.loggedIn();
 
-  if (isLoggedIn) {
-    router.push("/");
-    return null;
-  }
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push("/");
+    }
+  }, [router, isLoggedIn]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-    let res;
+    setMessage("");
+
     try {
+      let res;
       switch (mode) {
-        case Mode.LOGIN:
+        case "LOGIN":
           res = await wixClient.auth.login({ email, password });
           break;
-        case Mode.REGISTER:
+        case "REGISTER":
           res = await wixClient.auth.register({
             password,
             email,
             profile: { nickname: username },
           });
           break;
-        case Mode.RESET_PASSWORD:
+        case "RESET_PASSWORD":
           res = await wixClient.auth.sendPasswordResetEmail(pathname, email);
+          setMessage("Check your email for a link to reset your password");
           break;
-        case Mode.EMAIL_VERIFICATION:
+        case "EMAIL_VERIFICATION":
           res = await wixClient.auth.processVerification({
             verificationCode: emailCode,
           });
           break;
         default:
+          throw new Error("Invalid mode");
+      }
+
+      switch (res?.loginState) {
+        case LoginState.SUCCESS:
+          setMessage("Successful! You are being redirected");
+
+          const sessionToken = res?.data?.sessionToken;
+          if (!sessionToken) {
+            throw new Error("Session token is missing");
+          }
+
+          try {
+            const tokens = await wixClient.auth.getMemberTokensForDirectLogin(
+              sessionToken
+            );
+
+            console.log("Tokens received:", tokens);
+
+            Cookies.set("refreshToken", JSON.stringify(tokens.refreshToken), {
+              expires: 2,
+            });
+
+            wixClient.auth.setTokens(tokens);
+
+            console.log("Tokens set and cookies updated");
+
+            setTimeout(() => {
+              if (wixClient.auth.loggedIn()) {
+                router.push("/");
+              }
+            }, 1000);
+          } catch (error) {
+            console.error("Error while handling tokens and redirect:", error);
+            setMessage("An error occurred during login. Please try again.");
+          }
+          break;
+
+        case LoginState.FAILURE:
+          if (
+            res.errorCode === "invalidEmail" ||
+            res.errorCode === "invalidPassword"
+          ) {
+            setError("Invalid email or password!");
+          } else if (res.errorCode === "emailAlreadyExists") {
+            setError("Email already exists!");
+          } else if (res.errorCode === "resetPassword") {
+            setError("Reset password failed. Please try again.");
+          } else {
+            setError("An unexpected error occurred. Please try again.");
+          }
+          break;
+        case LoginState.EMAIL_VERIFICATION_REQUIRED:
+          setMode(Mode.EMAIL_VERIFICATION);
+          break;
+        case LoginState.OWNER_APPROVAL_REQUIRED:
+          setMessage("Please wait for the owner to approve your account");
+          break;
+        default:
+          setError("An unexpected error occurred. Please try again.");
           break;
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setError("Something went wrong");
     } finally {
       setIsLoading(false);
     }
-    console.log("res", res?.loginState);
-    switch (res?.loginState) {
-      case LoginState.SUCCESS:
-        setMessage("Successful You are being redirected");
-        const tokens = await wixClient.auth.getMemberTokensForDirectLogin(
-          res?.data?.sessionToken!
-        );
-        Cookies.set("refreshToken", JSON.stringify(tokens.refreshToken), {
-          expires: 2,
-        });
-        wixClient.auth.setTokens(tokens);
-        console.log("Tokens", tokens);
-      // router.push("/");
-    }
   };
+
   return (
     <div className="h-[calc(100vh-80px)] px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 flex items-center justify-center relative ">
       <form

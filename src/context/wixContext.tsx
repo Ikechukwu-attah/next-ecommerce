@@ -4,6 +4,7 @@ import { createClient, OAuthStrategy } from "@wix/sdk";
 import { products, collections } from "@wix/stores";
 import Cookies from "js-cookie";
 import { ReactNode } from "react";
+import { currentCart } from "@wix/ecom";
 
 import { createContext } from "react";
 
@@ -13,7 +14,7 @@ const wixClient = createClient({
   modules: {
     products,
     collections,
-    //   currentCart
+    currentCart,
   },
   auth: OAuthStrategy({
     clientId: process.env.NEXT_PUBLIC_WIX_CLIENT_ID!,
